@@ -112,7 +112,7 @@ Each component accepts a configuration object with common properties:
 Components emit various events you can listen to:
 
 ```typescript
-button.on("UIButtonClicked", event => {
+button.emitter.on("UIButtonClicked", event => {
   console.log("Button was clicked!");
 });
 ```
