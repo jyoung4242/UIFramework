@@ -89,7 +89,7 @@ engine.start();
 ### Keyboard Navigation
 
 ```ts
-import { UIFocusManager } from "excalibur-ui-framework";
+import { UIFocusManager } from "./Components";
 
 const focusManager = new UIFocusManager();
 focusManager.register(button, slider, input);
