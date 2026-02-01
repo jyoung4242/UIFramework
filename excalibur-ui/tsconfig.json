@@ -6,5 +6,7 @@
     "lib": ["ES2015", "dom"],
     "outDir": "dist",
     "declaration": true
-  }
+  },
+  "include": ["Components"],
+  "exclude": ["tests", "**/*.test.ts", "node_modules", "examples"]
 }

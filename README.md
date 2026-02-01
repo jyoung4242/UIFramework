@@ -42,16 +42,19 @@ game development.
 
 ## Installation
 
-```bash
-npm install excalibur-ui-framework
+This isn't published to npm.
 
+In the repo just pull down the Components folder and include as such:
+
+```ts
+import { UIButton, UIPanel } from "./Components";
 ```
 
 ## Quick Start
 
 ```typescript
 import { Engine, vec, Color } from "excalibur";
-import { UIButton, UIPanel } from "excalibur-ui-framework";
+import { UIButton, UIPanel } from "./Components";
 
 const engine = new Engine();
 
