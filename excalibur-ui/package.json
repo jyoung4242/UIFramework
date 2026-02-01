@@ -1,22 +1,57 @@
 {
-  "name": "excalibur-ui",
-  "version": "1.0.0",
+  "name": "excalibur-ui-framework",
+  "version": "0.0.1",
   "description": "UI Plugin for ExcaliburJS",
-  "license": "ISC",
-  "author": "",
+  "license": "MIT",
+  "author": "Justin Young",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "test": "vitest"
+    "build": "tsc",
+    "test": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "homepage": "https://github.com/jyoung4242/UIFramework",
+  "bugs": {
+    "url": "https://github.com/jyoung4242/UIFramework/issues"
+  },
+  "peerDependencies": {
+    "excalibur": ">=0.32.0"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
-    "canvas": "^3.2.1",
-    "canvas-txt": "^4.1.1",
-    "vitest": "^4.0.18"
+    "canvas-txt": "^4.1.1"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.18",
     "jsdom": "^27.4.0",
-    "typescript": "^5.9.3"
-  }
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "canvas": "^3.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jyoung4242/UIFramework"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "excalibur",
+    "ui",
+    "game-ui",
+    "typescript",
+    "plugin"
+  ]
 }

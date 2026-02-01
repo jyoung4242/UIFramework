@@ -1,6 +1,7 @@
 # Excalibur UI Framework
 
-A comprehensive UI component library for [Excalibur.js](https://excaliburjs.com/), providing interactive and accessible UI elements for game development.
+A comprehensive UI component library for [Excalibur.js](https://excaliburjs.com/), providing interactive and accessible UI elements for
+game development.
 
 ## Features
 
@@ -10,35 +11,48 @@ A comprehensive UI component library for [Excalibur.js](https://excaliburjs.com/
 - **Customizable Theming**: Extensive color and styling options
 - **TypeScript Support**: Fully typed for better development experience
 - **Event-Driven**: Rich event system for component interactions
-- **Accessibility**: Focus indicators and keyboard navigation
+- **Accessibility**: Visual focus indicators, tab navigation, and keyboard activation (Enter/Space)
 
 ## Components
 
-- **UIButton** - Clickable buttons with hover/press states
-- **UIPanel** - Container panels with optional borders and backgrounds
-- **UILabel** - Text display labels
-- **UISlider** - Draggable sliders for value selection
-- **UISwitch** - Toggle switches
-- **UITextInput** - Text input fields
-- **UIProgressBar** - Progress indicators
-- **UIImage** - Image display components
-- **UICheckbox** - Checkable boxes
-- **UINumeric** - Numeric input controls
-- **UITabbedPanel** - Tabbed interface containers
-- **UIRadioGroup** - Radio button groups
-- **UIFocusManager** - Keyboard navigation management
+### Input Components
+
+- UIButton
+- UISlider
+- UISwitch
+- UITextInput
+- UICheckbox
+- UIRadioGroup
+- UINumeric
+
+### Display Components
+
+- UILabel
+- UIImage
+- UIProgressBar
+
+### Layout Components
+
+- UIPanel
+- UITabbedPanel
+
+### Systems
+
+- UIFocusManager
 
 ## Installation
 
 ```bash
-npm install excalibur-ui
+npm install excalibur-ui-framework
+
 ```
 
 ## Quick Start
 
 ```typescript
 import { Engine } from "excalibur";
-import { UIButton, UIPanel } from "excalibur-ui";
+import { UIButton, UIPanel } from "excalibur-ui-framework"
+";
 
 const engine = new Engine();
 
@@ -88,7 +102,7 @@ Each component accepts a configuration object with common properties:
 Components emit various events you can listen to:
 
 ```typescript
-button.on("UIButtonClicked", (event) => {
+button.on("UIButtonClicked", event => {
   console.log("Button was clicked!");
 });
 ```
@@ -102,8 +116,8 @@ const button = new UIButton({
   colors: {
     mainStarting: Color.Blue,
     hoverStarting: Color.LightBlue,
-    disabledStarting: Color.Gray
-  }
+    disabledStarting: Color.Gray,
+  },
 });
 ```
 
@@ -139,7 +153,7 @@ Contributions are welcome! Please feel free to submit issues and pull requests.
 
 ## License
 
-ISC License
+MIT License
 
 ## Dependencies
 
@@ -152,5 +166,6 @@ ISC License
 - TypeScript ^5.9.3
 - Vitest ^4.0.18
 - @vitest/coverage-v8 ^4.0.18
-- jsdom ^27.4.0</content>
-<parameter name="filePath">c:\programming\UIFramework\README.md
+- jsdom ^27.4.0</content> <parameter name="filePath">c:\programming\UIFramework\README.md
+
+> ⚠️ This project is under active development. APIs may change before v1.0.
