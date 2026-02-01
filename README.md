@@ -92,6 +92,7 @@ const focusManager = new UIFocusManager();
 focusManager.register(button, slider, input);
 focusManager.setFocus(button);  // sets initial focus state
 focusManager.moveFocus();  // moves to next tab Index
+```
 
 ## Documentation
 
