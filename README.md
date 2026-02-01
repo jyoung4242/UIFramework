@@ -85,13 +85,13 @@ engine.start();
 
 ### Keyboard Navigation
 
-````ts
+```ts
 import { UIFocusManager } from "excalibur-ui-framework";
 
 const focusManager = new UIFocusManager();
 focusManager.register(button, slider, input);
-focusManager.setFocus(button);  // sets initial focus state
-focusManager.moveFocus();  // moves to next tab Index
+focusManager.setFocus(button); // sets initial focus state
+focusManager.moveFocus(); // moves to next tab Index
 ```
 
 ## Documentation
@@ -115,7 +115,7 @@ Components emit various events you can listen to:
 button.on("UIButtonClicked", event => {
   console.log("Button was clicked!");
 });
-````
+```
 
 ### Theming
 
