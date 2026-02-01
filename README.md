@@ -44,7 +44,7 @@ game development.
 
 This isn't published to npm.
 
-In the repo just pull down the Components folder and include as such:
+In the repo just pull down the `./excalibur-ui/Components` folder and include as such:
 
 ```ts
 import { UIButton, UIPanel } from "./Components";
