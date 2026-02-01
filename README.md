@@ -50,9 +50,8 @@ npm install excalibur-ui-framework
 ## Quick Start
 
 ```typescript
-import { Engine } from "excalibur";
-import { UIButton, UIPanel } from "excalibur-ui-framework"
-";
+import { Engine, vec, Color } from "excalibur";
+import { UIButton, UIPanel } from "excalibur-ui-framework";
 
 const engine = new Engine();
 
@@ -64,7 +63,7 @@ const panel = new UIPanel({
   pos: vec(100, 100),
   colors: {
     backgroundStarting: Color.LightGray,
-  }
+  },
 });
 
 // Create a button
@@ -74,7 +73,7 @@ const button = new UIButton({
   height: 50,
   pos: vec(150, 150),
   idleText: "Click Me!",
-  callback: () => console.log("Button clicked!")
+  callback: () => console.log("Button clicked!"),
 });
 
 // Add to engine
@@ -83,6 +82,16 @@ engine.add(button);
 
 engine.start();
 ```
+
+### Keyboard Navigation
+
+````ts
+import { UIFocusManager } from "excalibur-ui-framework";
+
+const focusManager = new UIFocusManager();
+focusManager.register(button, slider, input);
+focusManager.setFocus(button);  // sets initial focus state
+focusManager.moveFocus();  // moves to next tab Index
 
 ## Documentation
 
@@ -105,7 +114,7 @@ Components emit various events you can listen to:
 button.on("UIButtonClicked", event => {
   console.log("Button was clicked!");
 });
-```
+````
 
 ### Theming
 
@@ -123,7 +132,7 @@ const button = new UIButton({
 
 ## Examples
 
-Check out the `test App/` directory for comprehensive examples showing all components in action.
+Check out the `/test App/` directory for comprehensive examples showing all components in action.
 
 ## Development
 
@@ -133,16 +142,10 @@ Check out the `test App/` directory for comprehensive examples showing all compo
 npm run build
 ```
 
-### Testing
-
-```bash
-npm test
-```
-
 ### Running Examples
 
 ```bash
-cd "test App"
+cd "./test App/"
 npm install
 npm run dev
 ```
@@ -159,13 +162,5 @@ MIT License
 
 - [Excalibur.js](https://excaliburjs.com/) ^0.32.0
 - [canvas-txt](https://github.com/georgedoescode/canvas-txt) ^4.1.1
-- [canvas](https://github.com/Automattic/node-canvas) ^3.2.1
-
-## Development Dependencies
-
-- TypeScript ^5.9.3
-- Vitest ^4.0.18
-- @vitest/coverage-v8 ^4.0.18
-- jsdom ^27.4.0</content> <parameter name="filePath">c:\programming\UIFramework\README.md
 
 > ⚠️ This project is under active development. APIs may change before v1.0.
