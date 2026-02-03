@@ -1,6 +1,6 @@
-import { Color, Engine, ExcaliburGraphicsContext, Font, GameEvent, Graphic, TextOptions, vec, Vector } from "excalibur";
+import { Color, Engine, ExcaliburGraphicsContext, Font, GameEvent, Graphic, PointerEvent, TextOptions, vec, Vector } from "excalibur";
 import { drawText } from "canvas-txt";
-import { BaseUIConfig, DisplayUIComponent } from "./uiComponent";
+import { BaseUIConfig, DisplayUIComponent, IClickable, IHoverable } from "./uiComponent";
 
 /**
  * Visual states for a UILabel.
@@ -88,13 +88,13 @@ type UILabelColors = {
  * respond to hover events if configured. Emits events when text changes
  * or when enabled/disabled state changes.
  */
-export class UILabel extends DisplayUIComponent<UILabelConfig, UILabelEvents> {
+export class UILabel extends DisplayUIComponent<UILabelConfig, UILabelEvents> implements IHoverable, IClickable {
   /** Current label state. */
   private state: UILabelState = "idle";
   /** Internal text value. */
   private _text: string;
   /** Whether the pointer is currently over the label. */
-  private _isHovered = false;
+  _isHovered = false;
 
   /**
    * Create a new UILabel.
@@ -139,6 +139,14 @@ export class UILabel extends DisplayUIComponent<UILabelConfig, UILabelEvents> {
     }
   }
 
+  onClick = (event: PointerEvent): void => {
+    this.emitter.emit("UILabelClicked", { name: this.name, target: this, event });
+  };
+
+  onPointerDown = (event: PointerEvent): void => {
+    this.emitter.emit("UILabelPointerDown", { name: this.name, target: this, event });
+  };
+
   /**
    * Get the current label text.
    */
@@ -161,7 +169,7 @@ export class UILabel extends DisplayUIComponent<UILabelConfig, UILabelEvents> {
    * Pointer enter handler.
    * Marks the label as hovered and emits `UILabelHovered`.
    */
-  private onHover = (): void => {
+  onHover = (): void => {
     if (!this.isEnabled) return;
     this._isHovered = true;
     this.emitter.emit("UILabelHovered", { name: this.name, target: this, event: "hovered" });
@@ -172,7 +180,7 @@ export class UILabel extends DisplayUIComponent<UILabelConfig, UILabelEvents> {
    * Pointer leave handler.
    * Marks the label as unhovered and emits `UILabelUnhovered`.
    */
-  private onUnhover = (): void => {
+  onUnhover = (): void => {
     if (!this.isEnabled) return;
     this._isHovered = false;
     this.emitter.emit("UILabelUnhovered", { name: this.name, target: this, event: "unhovered" });

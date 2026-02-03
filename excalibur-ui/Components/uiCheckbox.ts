@@ -13,7 +13,7 @@ import {
   vec,
   Vector,
 } from "excalibur";
-import { BaseUIConfig, IClickable, IFocusable, InteractiveUIComponent } from "./uiComponent";
+import { BaseUIConfig, InteractiveUIComponent } from "./uiComponent";
 
 /**
  * Event map emitted by `UICheckbox`.

@@ -45,6 +45,7 @@ import {
 } from "../../excalibur-ui/Components/";
 import { buttonSS, loader, Resources } from "./resources";
 import { initializeTabbedPanelDemo } from "./tabbedExample";
+import { initializeMenuDemo } from "./Components/Menu";
 
 await UI.create(document.body, model, template).attached;
 
@@ -53,7 +54,8 @@ const game = new Engine({
   height: 600, // the height of the canvas
   canvasElementId: "cnv", // the DOM canvas element ID, if you are providing your own
   displayMode: DisplayMode.Fixed, // the display mode
-  pixelArt: true,
+  pixelArt: false,
+  suppressPlayButton: true,
 });
 await game.start(loader);
 let cnv = document.getElementById("cnv") as HTMLCanvasElement;
@@ -155,6 +157,7 @@ const myfirstPanelConfig: UIPanelConfig = {
   visible: true,
 };
 const myfirstPanel = new UIPanel(myfirstPanelConfig);
+
 game.add(myfirstPanel);
 
 const mysecondPanelConfig: UISpritePanelConfig = {
@@ -609,3 +612,5 @@ FM.register([
   myNumeric,
 ]);
 FM.setFocus(myButton);
+
+initializeMenuDemo(game);

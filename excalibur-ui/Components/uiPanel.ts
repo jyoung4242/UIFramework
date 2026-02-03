@@ -1,7 +1,6 @@
 import {
   Color,
   Engine,
-  EventEmitter,
   ExcaliburGraphicsContext,
   GameEvent,
   Graphic,
@@ -11,8 +10,9 @@ import {
   NineSlice,
   NineSliceConfig,
   NineSliceStretch,
+  PointerEvent,
 } from "excalibur";
-import { BaseUIConfig, DisplayUIComponent } from "./uiComponent";
+import { BaseUIConfig, DisplayUIComponent, IHoverable } from "./uiComponent";
 
 /**
  * Event map emitted by all UIPanel variants.
@@ -20,6 +20,8 @@ import { BaseUIConfig, DisplayUIComponent } from "./uiComponent";
 export type UIPanelEvents = {
   UIPanelShown: UIPanelShown;
   UIPanelHidden: UIPanelHidden;
+  UIPanelHovered: UIPanelHovered;
+  UIPanelUnhovered: UIPanelUnhovered;
 };
 
 // #region Standard Panel
@@ -82,23 +84,25 @@ type UIPanelColors = {
  * Used as a container for other UI elements. Extends DisplayUIComponent
  * since panels are non-interactive display elements.
  */
-export class UIPanel extends DisplayUIComponent<UIPanelConfig, UIPanelEvents> {
+export class UIPanel extends DisplayUIComponent<UIPanelConfig, UIPanelEvents> implements IHoverable {
   /**
    * Create a new UIPanel.
    * @param panelConfig - Partial configuration; defaults will be applied.
    */
+  _isHovered: boolean;
+
   constructor(panelConfig: Partial<UIPanelConfig>) {
     const localConfig = { ...defaultPanelConfig, ...panelConfig };
     super(localConfig);
     this._config = localConfig;
     this._visible = localConfig.visible ?? true;
-
+    this._isHovered = false;
     const size = vec(localConfig.width, localConfig.height);
     this.graphics.use(new UIPanelGraphic(size, this._config));
-
+    this.pointer.useGraphicsBounds = true;
     // Set initial visibility
     if (!this._visible) {
-      this.graphics.visible = false;
+      this.graphics.isVisible = false;
     }
   }
 
@@ -107,10 +111,15 @@ export class UIPanel extends DisplayUIComponent<UIPanelConfig, UIPanelEvents> {
    * @param engine - The engine instance.
    */
   onAdd(engine: Engine): void {
+    console.log("running parent onadd");
+
     // Ensure visibility state is correct
     if (!this._visible) {
-      this.graphics.visible = false;
+      this.graphics.isVisible = false;
     }
+
+    this.on("pointerenter", this.onHover);
+    this.on("pointerleave", this.onUnhover);
   }
 
   /**
@@ -119,8 +128,29 @@ export class UIPanel extends DisplayUIComponent<UIPanelConfig, UIPanelEvents> {
    */
   onRemove(engine: Engine): void {
     // Optionally emit hidden event on removal
+    this.off("pointerenter", this.onHover);
+    this.off("pointerleave", this.onUnhover);
   }
 
+  onHover = (): void => {
+    console.log("base hover");
+
+    if (!this._isHovered) {
+      this._isHovered = true;
+      this.emitter.emit("UIPanelHovered", { name: this.name, target: this, event: "hovered" });
+    }
+  };
+
+  onUnhover = (): void => {
+    if (this._isHovered) {
+      this._isHovered = false;
+      this.emitter.emit("UIPanelUnhovered", { name: this.name, target: this, event: "unhovered" });
+    }
+  };
+
+  get isHovered(): boolean {
+    return this._isHovered;
+  }
   /**
    * Hook called when panel is shown.
    * Override to emit events or perform custom logic.
@@ -336,7 +366,12 @@ const defaultSpritePanelConfig: UISpritePanelConfig = {
  *
  * Renders a Sprite stretched to the panel bounds.
  */
-export class UISpritePanel extends DisplayUIComponent<UISpritePanelConfig, UIPanelEvents> {
+export class UISpritePanel extends DisplayUIComponent<UISpritePanelConfig, UIPanelEvents> implements IHoverable {
+  _isHovered: boolean;
+  get isHovered(): boolean {
+    return this._isHovered;
+  }
+
   /**
    * Create a new UISpritePanel.
    * @param panelConfig - Partial configuration; defaults will be applied.
@@ -346,13 +381,13 @@ export class UISpritePanel extends DisplayUIComponent<UISpritePanelConfig, UIPan
     super(localConfig);
     this._config = localConfig;
     this._visible = localConfig.visible ?? true;
-
+    this._isHovered = false;
     const size = vec(localConfig.width, localConfig.height);
     this.graphics.use(new UISpritePanelGraphic(size, this._config));
 
     // Set initial visibility
     if (!this._visible) {
-      this.graphics.visible = false;
+      this.graphics.isVisible = false;
     }
   }
 
@@ -363,8 +398,10 @@ export class UISpritePanel extends DisplayUIComponent<UISpritePanelConfig, UIPan
   onAdd(engine: Engine): void {
     // Ensure visibility state is correct
     if (!this._visible) {
-      this.graphics.visible = false;
+      this.graphics.isVisible = false;
     }
+    this.on("pointerenter", this.onHover);
+    this.on("pointerleave", this.onUnhover);
   }
 
   /**
@@ -373,7 +410,23 @@ export class UISpritePanel extends DisplayUIComponent<UISpritePanelConfig, UIPan
    */
   onRemove(engine: Engine): void {
     // Optionally emit hidden event on removal
+    this.off("pointerenter", this.onHover);
+    this.off("pointerleave", this.onUnhover);
   }
+
+  onHover = (): void => {
+    if (!this._isHovered) {
+      this._isHovered = true;
+      this.emitter.emit("UIPanelHovered", { name: this.name, target: this, event: "hovered" });
+    }
+  };
+
+  onUnhover = (): void => {
+    if (this._isHovered) {
+      this._isHovered = false;
+      this.emitter.emit("UIPanelUnhovered", { name: this.name, target: this, event: "unhovered" });
+    }
+  };
 
   /**
    * Hook called when panel is shown.
@@ -529,7 +582,11 @@ const defaultNineSlicePanelConfig: Partial<UINineSlicePanelConfig> = {
  * Preserves corner fidelity while stretching edges and center.
  * Uses Excalibur's built-in NineSlice graphic.
  */
-export class UINineSlicePanel extends DisplayUIComponent<UINineSlicePanelConfig, UIPanelEvents> {
+export class UINineSlicePanel extends DisplayUIComponent<UINineSlicePanelConfig, UIPanelEvents> implements IHoverable {
+  _isHovered: boolean;
+  get isHovered(): boolean {
+    return this._isHovered;
+  }
   /**
    * Create a new UINineSlicePanel.
    * @param panelConfig - Configuration including sprite and slice regions.
@@ -556,7 +613,7 @@ export class UINineSlicePanel extends DisplayUIComponent<UINineSlicePanelConfig,
 
     // Set initial visibility
     if (!this._visible) {
-      this.graphics.visible = false;
+      this.graphics.isVisible = false;
     }
   }
 
@@ -567,7 +624,7 @@ export class UINineSlicePanel extends DisplayUIComponent<UINineSlicePanelConfig,
   onAdd(engine: Engine): void {
     // Ensure visibility state is correct
     if (!this._visible) {
-      this.graphics.visible = false;
+      this.graphics.isVisible = false;
     }
   }
 
@@ -578,6 +635,15 @@ export class UINineSlicePanel extends DisplayUIComponent<UINineSlicePanelConfig,
   onRemove(engine: Engine): void {
     // Optionally emit hidden event on removal
   }
+
+  onHover = (): void => {
+    this._isHovered = true;
+    this.emitter.emit("UIPanelHovered", { name: this.name, target: this, event });
+  };
+  onUnhover = (): void => {
+    this._isHovered = false;
+    this.emitter.emit("UIPanelUnhovered", { name: this.name, target: this, event });
+  };
 
   /**
    * Hook called when panel is shown.
@@ -628,6 +694,18 @@ export class UIPanelShown extends GameEvent<UIPanel | UISpritePanel | UINineSlic
 
 /** Event emitted when a panel is hidden. */
 export class UIPanelHidden extends GameEvent<UIPanel | UISpritePanel | UINineSlicePanel> {
+  constructor(public target: UIPanel | UISpritePanel | UINineSlicePanel) {
+    super();
+  }
+}
+
+export class UIPanelHovered extends GameEvent<UIPanel | UISpritePanel | UINineSlicePanel> {
+  constructor(public target: UIPanel | UISpritePanel | UINineSlicePanel) {
+    super();
+  }
+}
+
+export class UIPanelUnhovered extends GameEvent<UIPanel | UISpritePanel | UINineSlicePanel> {
   constructor(public target: UIPanel | UISpritePanel | UINineSlicePanel) {
     super();
   }

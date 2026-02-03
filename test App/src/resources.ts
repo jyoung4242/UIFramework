@@ -16,6 +16,11 @@ import megaman from "./Assets/megaman.png";
 import checked from "./Assets/checkboxChecked.png";
 import unchecked from "./Assets/checkboxUnchecked.png";
 
+//menu icons
+import file from "./Assets/Menu/folder.png";
+import save from "./Assets/Menu/save.png";
+import help from "./Assets/Menu/sign.png";
+
 export const Resources = {
   buttons: new ImageSource(buttons),
   woodPanel: new ImageSource(woodPanel),
@@ -32,6 +37,11 @@ export const Resources = {
   megaman: new ImageSource(megaman),
   checkboxChecked: new ImageSource(checked),
   checkboxUnchecked: new ImageSource(unchecked),
+
+  //menu icons
+  file: new ImageSource(file),
+  save: new ImageSource(save),
+  help: new ImageSource(help),
 };
 
 export const loader = new Loader();
